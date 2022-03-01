@@ -1,7 +1,7 @@
 #ifndef LIBCHESS_POSITION_HPP
 #define LIBCHESS_POSITION_HPP
 
-#include <ostream>
+#include <iostream>
 #include <string>
 #include <vector>
 #include "bitboard.hpp"
@@ -9,6 +9,7 @@
 #include "piece.hpp"
 #include "side.hpp"
 #include "zobrist.hpp"
+#include <map>
 
 namespace libchess {
 
@@ -92,15 +93,15 @@ class Position {
         }
 
         int repeats = 0;
+        std::map<std::uint64_t, int> cnts;
+        cnts[hash_] += 1;
         for (std::size_t i = 2; i <= history_.size() && i <= halfmoves(); i += 2) {
-            if (history_[history_.size() - i].hash == hash_) {
-                repeats++;
-                if (repeats >= 2) {
-                    return true;
-                }
+            cnts[history_[history_.size() - i].hash]++; 
+            if(cnts[history_[history_.size() - i].hash] >= 3) {
+                return true;
             }
         }
-        return false;
+        return cnts[hash_] >= 3;
     }
 
     [[nodiscard]] constexpr bool fiftymoves() const noexcept {
