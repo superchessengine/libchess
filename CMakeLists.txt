@@ -12,7 +12,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "-Wall -pedantic -pedantic-errors -Wextra -Wcast-align -Wcast-qual -Wchar-subscripts -Wcomment -Wdisabled-optimization -Wfloat-equal -Wformat -Wformat=2 -Wformat-nonliteral -Wformat-security -Wformat-y2k -Wimport -Winit-self -Winline -Winvalid-pch -Wmissing-braces -Wmissing-field-initializers -Wmissing-format-attribute -Wmissing-include-dirs -Wmissing-noreturn -Wodr -Wpacked -Wparentheses -Wpointer-arith -Wredundant-decls -Wreturn-type -Wsequence-point -Wshadow -Wsign-compare -Wstack-protector -Wstrict-aliasing -Wstrict-aliasing=2 -Wswitch -Wswitch-default -Wswitch-enum -Wtrigraphs -Wuninitialized -Wunknown-pragmas -Wunreachable-code -Wunused -Wunused-function -Wunused-label -Wunused-parameter -Wunused-value -Wunused-variable -Wvariadic-macros -Wvolatile-register-var -Wwrite-strings")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -DNDEBUG")
-set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
 
 # Default build type
 if(NOT CMAKE_BUILD_TYPE)
@@ -69,58 +68,6 @@ add_library(
     src/undomove.cpp
 )
 
-# Add the test executable
-add_executable(
-    libchess-test
-    tests/main.cpp
-    tests/checkers.cpp
-    tests/consistency.cpp
-    tests/draw.cpp
-    tests/fen.cpp
-    tests/hash.cpp
-    tests/in_check.cpp
-    tests/is_capture.cpp
-    tests/is_legal.cpp
-    tests/iterator.cpp
-    tests/legal_moves.cpp
-    tests/movegen.cpp
-    tests/parse_move.cpp
-    tests/passed_pawns.cpp
-    tests/perft.cpp
-    tests/pinned.cpp
-    tests/squares_attacked.cpp
-)
-
-# Add example
-add_executable(
-    perft
-    examples/perft.cpp
-)
-
-# Add example
-add_executable(
-    ttperft
-    examples/ttperft.cpp
-)
-
-# Add example
-add_executable(
-    split
-    examples/split.cpp
-)
-
-# Add example
-add_executable(
-    suite
-    examples/suite.cpp
-)
-
-# Add example
-add_executable(
-    ttsuite
-    examples/ttsuite.cpp
-)
-
 set_target_properties(
     libchess-static
     PROPERTIES
@@ -138,12 +85,3 @@ set_target_properties(
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/shared"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/shared"
 )
-
-set_property(TARGET libchess-test PROPERTY INTERPROCEDURAL_OPTIMIZATION_RELEASE FALSE)
-
-target_link_libraries(libchess-test libchess-static)
-target_link_libraries(perft libchess-static)
-target_link_libraries(ttperft libchess-static)
-target_link_libraries(split libchess-static)
-target_link_libraries(suite libchess-static)
-target_link_libraries(ttsuite libchess-static)
