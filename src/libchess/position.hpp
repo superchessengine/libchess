@@ -91,17 +91,16 @@ class Position {
         if (halfmove_clock_ < 8) {
             return false;
         }
-
         int repeats = 0;
-        std::map<std::uint64_t, int> cnts;
-        cnts[hash_] += 1;
         for (std::size_t i = 2; i <= history_.size() && i <= halfmoves(); i += 2) {
-            cnts[history_[history_.size() - i].hash]++; 
-            if(cnts[history_[history_.size() - i].hash] >= 3) {
-                return true;
+            if (history_[history_.size() - i].hash == hash_) {
+                repeats++;
+                if (repeats >= 2) {
+                    return true;
+                }
             }
         }
-        return cnts[hash_] >= 3;
+        return false;
     }
 
     [[nodiscard]] constexpr bool fiftymoves() const noexcept {
